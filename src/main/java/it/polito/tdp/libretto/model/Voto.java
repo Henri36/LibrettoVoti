@@ -2,7 +2,7 @@ package it.polito.tdp.libretto.model;
 
 import java.time.LocalDate;
 
-public class Voto {
+public class Voto  implements Comparable <Voto>{
 	
 	private String corso; // Tecniche di programmazione
 	private int voto; // 28
@@ -20,7 +20,17 @@ public class Voto {
 		this.voto = voto;
 		this.data = data;
 	}
-
+	
+	/**
+	 * COPY CONSTRUCTOR di {@link Voto} : crea un nuovo {@link Voto} copiando il contenuto del parametro {@code v}
+	 * @param v voto da copiare
+	 */
+	public Voto(Voto v) {
+		this.corso= v.corso; //v.getCorso()
+		this.voto= v.voto;
+		this.data=v.data;
+	}
+	
 	public String getCorso() {
 		return corso;
 	}
@@ -50,7 +60,7 @@ public class Voto {
 	 * metodo per la descrizione e quindi la stampa nel formato indicato di un voto
 	 */
 	public String toString() {
-		return corso + ", " + voto + ", " + data;
+		return corso + ": " + voto + ", " + data;
 	}
 
 	@Override
@@ -58,8 +68,6 @@ public class Voto {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((corso == null) ? 0 : corso.hashCode());
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		result = prime * result + voto;
 		return result;
 	}
 
@@ -77,14 +85,33 @@ public class Voto {
 				return false;
 		} else if (!corso.equals(other.corso))
 			return false;
-		if (data == null) {
-			if (other.data != null)
-				return false;
-		} else if (!data.equals(other.data))
-			return false;
-		if (voto != other.voto)
-			return false;
 		return true;
+	}
+	
+	public boolean isCorretto() {
+		if(this.getVoto()<=0 || this.getVoto()>30 || this.getData().equals(null) || this.getCorso().equals(null)) {
+			return false;
+		} 
+		else
+			return true;
+	}
+	
+	/**
+	 * Copia (clona) un oggetto di tipo {@link Voto}
+	 */
+	public Voto clone() {
+		Voto nuovo = new Voto(this.corso, this.voto, this.data);
+		return nuovo;
+	}
+
+	@Override
+	public int compareTo(Voto other) {
+		/*
+		 * <0 se this < other
+		 * =0 se this == other 
+		 * >0 se this > other
+		 */
+		return this.corso.compareTo(other.corso);
 	}
 	
 	
